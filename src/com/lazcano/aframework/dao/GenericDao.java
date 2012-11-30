@@ -19,7 +19,7 @@ import org.eclipse.persistence.queries.ReadObjectQuery;
 import com.lazcano.aframework.model.LogicRemove;
 
 /**
- * Clase que proporciona las funcionalidades bÃ¡sicas para los daos.
+ * Clase que proporciona las funcionalidades básicas para los daos.
  * @author ilazcang
  */
 public abstract class GenericDao <T>{
@@ -29,12 +29,15 @@ public abstract class GenericDao <T>{
     
     protected abstract Class<T> getTClass();
     
+    /**
+     * Constructor genérico además obtiene la instance de EntityManager que utilzará el dao.
+     */
     public GenericDao(){
         this.entityManager=EntityManagerControler.getInstance().getEntityManager();
     }
     
     /**
-     * MÃ©todo que guarda el objeto en la base de datos
+     * Método que guarda el objeto en la base de datos
      * @param objeto El objeto a guardar
      * @return el objeto con sus campos actualizados despuÃ©s de guardarlo
      */
@@ -45,16 +48,16 @@ public abstract class GenericDao <T>{
     }
     
     /**
-     * MÃ©todo que carga un objeto dado su clave.
+     * Método que carga un objeto dado su clave.
      * @param clave La clave del objeto a cargar
      * @return El objeto, o null si no existe.
      */
-    public T cargar(Integer clave){
+    public T cargar(Object clave){
         return this.entityManager.find(getTClass(), clave);
     }
     
     /**
-     * MÃ©todo que borra un objeto de la BD
+     * Método que borra un objeto de la BD
      * @param clave Clave del objeto a eliminar 
      */
     public void borrar(Integer clave){
@@ -72,7 +75,7 @@ public abstract class GenericDao <T>{
     }
     
     /**
-     * MÃ©todo que elimina un objeto de la base de datos 
+     * Método que elimina un objeto de la base de datos 
      * @param elemento El objeto a eliminar.
      */
     public void borrar(T elemento ){
@@ -88,6 +91,12 @@ public abstract class GenericDao <T>{
             
     }
     
+    /**
+     * Método de búsqueda para los daos
+     * @param sql Select a ejecutar en hql
+     * @param parametros Mapa con el par clave valor para los parámetros
+     * @return Lista con el resultado de la ejecución
+     */
     @SuppressWarnings("unchecked")
 	protected List<T> buscar(String sql,Map<String,Object> parametros){
         Query query= this.entityManager.createQuery(sql);
@@ -97,15 +106,27 @@ public abstract class GenericDao <T>{
         return  query.getResultList();
     }
     
+    /**
+     * Método de búsqueda para los daos con un máximo de resultados
+     * @param sql Select a ejecutar en hql
+     * @param parametros Mapa con el par clave valor para los parámetros
+     * @param tope Número máximo de resultados que se quiere obtener
+     * @return Lista con el resultado de la ejecución
+     */
     @SuppressWarnings("unchecked")
-    protected List<T> buscar(String galdera,Map<String,Object> parametroak,Integer tope){
-        Query query= this.entityManager.createQuery(galdera);
-        for(String izena:parametroak.keySet()){
-            query.setParameter(izena, parametroak.get(izena));
+    protected List<T> buscar(String sql,Map<String,Object> parametros,Integer tope){
+        Query query= this.entityManager.createQuery(sql);
+        for(String clave:parametros.keySet()){
+            query.setParameter(clave, parametros.get(clave));
         }
         return query.setMaxResults(tope).getResultList();
     }
     
+    /**
+     * Método que busca todos los elementos que se parezcan a uno dado.
+     * @param plantilla El elemento al que se deben parecer
+     * @return Lista de todos los elementos que coinciden con los valores del ejemplo
+     */
     @SuppressWarnings("unchecked")
     public List<T> buscarPorEjemplo(T plantilla){
         QueryByExamplePolicy policy = new QueryByExamplePolicy();
@@ -114,6 +135,11 @@ public abstract class GenericDao <T>{
         return query.getResultList();
     }
     
+    /**
+     * Método que busca todos los elementos que se parezcan a uno dado, paginando el resultado
+     * @param request petición con el elemento ejemplo, y desplazamiento y tope para la paginación
+     * @return Resultado con la lista de elementos, el total que hay en la base de datos y el número de registros obtenidos
+     */
     @SuppressWarnings("unchecked")
     public PaginationResult<T> buscarPorEjemplo(PaginationRequest request){
         QueryByExamplePolicy policy = new QueryByExamplePolicy();

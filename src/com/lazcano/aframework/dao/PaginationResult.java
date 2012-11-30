@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.lazcano.aframework.dao;
 
 import java.util.List;
@@ -9,14 +6,15 @@ import java.util.List;
 
 
 /**
- *
+ * Clase para los resultados de una búsqueda paginada
  * @author ilazcang
  */
 public class PaginationResult<T>{
-    private List<T> dataList;
-    private Integer total;
-    private Integer offSet;
-    private Integer maxResult;
+    
+	private List<T> dataList; //Resultado
+    private Integer total; //Numero total de registros 
+    private Integer offSet; //Desplazamiento en el resultado
+    private Integer maxResult; //Numero máximo de resultados por página
 
     /**
      * @return the dataList

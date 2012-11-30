@@ -8,12 +8,16 @@ package com.lazcano.aframework.dao;
 
 
 /**
- *
+ * Petición de búsqueda paginada
  * @author ilazcang
  */
 public class PaginationRequest {
-    private Object template;
-    private Integer offSet;
+    
+	// Elemento "Ejemplo"
+	private Object template;
+	// Desplazamiento en el paginado
+	private Integer offSet;
+	//Número máximo de resultados por página.
     private Integer maxResult;
 
     /**

@@ -20,12 +20,19 @@ public class EntityManagerControler {
     private EntityManager em;
     private static EntityManagerControler gestor;
     
+    /**
+     * Nos aseguramos que sigue el patrón Singleton
+     */
     private EntityManagerControler(){
         String puName=ConfigManager.getInstance().getPuName();
     	EntityManagerFactory emf=Persistence.createEntityManagerFactory(puName);
         em = emf.createEntityManager();
     }
     
+    /**
+     * Método para obtener la instancia de la clase.
+     * @return La instancia
+     */
     public static EntityManagerControler getInstance(){
         if(gestor==null){
             gestor=new EntityManagerControler();
@@ -33,6 +40,10 @@ public class EntityManagerControler {
         return gestor;
     }
     
+    /**
+     * EntityManager de la aplicación para JPA
+     * @return El entityManager de la aplicación.
+     */
     public EntityManager getEntityManager(){
         return this.em;
     }

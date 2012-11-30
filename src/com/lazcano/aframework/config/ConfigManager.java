@@ -7,7 +7,8 @@ import java.util.Properties;
 /**
  * Gestor de configuración del framework, carga los parámetros de configuración
  * del fichero aframework.properties, que se debe encontrar en el classpath de la 
- * aplicación.
+ * aplicación. Dicho fichero debe contener los siguientes parámetros.
+ * puName= Nombre del PU para la persistencia utilizando JPA
  * @author ilazcang
  *
  */
@@ -15,9 +16,13 @@ public class ConfigManager {
 	
 	private static ConfigManager configManager;
 	private Properties properties;
-	private static String FILE_NAME="aframework.propeties";
-	private static String PU_NAME="puName";
+	private static final String FILE_NAME="aframework.propeties";
+	private static final String PU_NAME="puName";
 	
+	
+	/**
+	 * Nos aseguramos que se sigue el patrón Singleton
+	 */
 	private ConfigManager(){
 		properties = new Properties();
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(FILE_NAME);
@@ -28,6 +33,10 @@ public class ConfigManager {
 		}
 	}
 	
+	/**
+	 * Método para obtener la instancia de la clase.
+	 * @return La instancia de la clase.
+	 */
 	public static ConfigManager getInstance(){
 		if(configManager==null){
 			configManager= new ConfigManager();
@@ -35,6 +44,10 @@ public class ConfigManager {
 		return configManager;
 	}
 	
+	/**
+	 * Método que devuelve el nombre del PU de la aplicación
+	 * @return El PU JPA de la aplicación
+	 */
 	public String getPuName(){
 		return this.properties.getProperty(PU_NAME);
 	}
